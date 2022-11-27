@@ -11,4 +11,23 @@
 ## Spiegelung
 ### Einrichte der Zugrffskonten
 ### Spiegelung per TSQL aktivieren
-### Filover auslösen
+### Failover auslösen
+
+## Windows Failover Cluster
+### iSCSI Laufwerke einrichten und verbinden
+### Cluster einrichten
+### Cluster prüfen - Ressourcen umbenennen
+### Condition Level Health Check timeout
+
+## SQL Cluster
+### Installation
+### FAilover automatischer Failover
+
+
+## Availability Groups
+### Einrichten 
+### Failover
+
+## Probleme bei Hochverfügbarkeit
+### Fehlende Logins fehlende Jobs
+
