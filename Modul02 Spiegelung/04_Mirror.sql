@@ -18,9 +18,6 @@ auf Sekunde restorebar
 Spiegelung braucht FULL
 
 
-!!! Wenn DB irgendiwe spiegelt/synct, dann verliert man Logins (master) und Jobs(msdb)
---erst ab SQl 2022 weniger ein Problem, aber nur in AVGS
-
 Die Kommunikation zw den Servern via Endpunkte erledigt entweder ein dediziertes Konto 
 oder sonst das SQL Dienstkonto der jeweiligen Instanzen
 
@@ -42,15 +39,6 @@ auf jedem Client den SQLNCLI verwenden und dort den Failoverpartner eintragen:
 Provider=SQLNCLI11.1;Integrated Security=SSPI;Persist Security Info=False;User ID="";Initial Catalog=LSMIRROR;Data Source=NodeOne;Initial File Name="";Failover Partner=NodeTwo;Server SPN=""
 
 
-VollSicherung und T Sicherung auf 2ten Server kopieren und restore with norecovery
-
-USE [master]
-RESTORE DATABASE [MirrorDB] FROM  DISK = N'C:\_SQLBACKUPS\STDINSTANZ\MirrorDB.bak' WITH  FILE = 1,  NORECOVERY,  NOUNLOAD,  STATS = 5
-RESTORE LOG [MirrorDB] FROM  DISK = N'C:\_SQLBACKUPS\STDINSTANZ\MirrorDB.bak' WITH  FILE = 2,  NORECOVERY,  NOUNLOAD,  STATS = 5
-
-GO
-
-
 
 */
 USE [master]
@@ -70,20 +58,13 @@ GRANT CONNECT ON ENDPOINT::Spiegelung TO [SQLDOM\svcSQL]
 
 USE MASTER
 
-TCP://NodeONE.SQLDOM.dom:5022
-
-TCP://NodeTwo.SQLDOM.dom:5022
-
---Auf HVSQL1
-ALTER DATABASE MIrrorDB 
+ALTER DATABASE Spiegelei 
  SET PARTNER = 'TCP://NodeTwo.SQLDOM.dom:5022'
 GO 
 
 USE MASTER
 
-
---auf HV-SQL2
-ALTER DATABASE MirrorDB 
+ALTER DATABASE Spiegelei 
  SET PARTNER = 'TCP://NodeOne.SQLDOM.dom:5022'
 GO 
 
@@ -109,7 +90,7 @@ GO 30000
 ALTER DATABASE <database_name> SET PARTNER FAILOVER;
 GO
 
---auf Spiegel.. zb wenn der Prizipal gar nicht mehr ansprechbar ist.
+--auf Spiegel
 --zwingend
 --Eventuell nicht synchronisiert
 
